@@ -1,0 +1,104 @@
+version: '3.8'
+
+# IMPORTANT: Copy .env.example to .env and update with your actual values before running
+# docker-compose --env-file .env up -d
+
+services:
+  # SQL Server Database
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: ecommerce-db
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${DB_PASSWORD:-CHANGE_ME_IN_ENV_FILE}
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - db-data:/var/opt/mssql
+    networks:
+      - ecommerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $${DB_PASSWORD} -Q 'SELECT 1' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecommerce-backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=db;Database=EcommerceDB;User=sa;Password=${DB_PASSWORD:-CHANGE_ME_IN_ENV_FILE};TrustServerCertificate=true;
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-CHANGE_ME_IN_ENV_FILE_MIN_32_CHARS}
+      - JwtSettings__Issuer=EcommerceAPI
+      - JwtSettings__Audience=EcommerceClient
+      - Stripe__SecretKey=${STRIPE_SECRET_KEY:-sk_test_placeholder}
+      - Stripe__PublishableKey=${STRIPE_PUBLISHABLE_KEY:-pk_test_placeholder}
+      - CorsOrigins__0=http://localhost
+      - CorsOrigins__1=http://localhost:80
+      - CorsOrigins__2=http://frontend
+      - CorsOrigins__3=http://frontend:80
+      - CorsOrigins__4=http://localhost:4200
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - backend-uploads:/app/wwwroot/uploads
+    networks:
+      - ecommerce-network
+    restart: unless-stopped
+
+  # Frontend (Angular)
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: ecommerce-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - ecommerce-network
+    restart: unless-stopped
+
+  # Redis Cache (optional - for session management and caching)
+  redis:
+    image: redis:alpine
+    container_name: ecommerce-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - ecommerce-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # Adminer (optional - database management UI)
+  adminer:
+    image: adminer
+    container_name: ecommerce-adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - ecommerce-network
+    restart: unless-stopped
+    depends_on:
+      - db
+
+networks:
+  ecommerce-network:
+    driver: bridge
+
+volumes:
+  db-data:
+  backend-uploads:
+  redis-data:

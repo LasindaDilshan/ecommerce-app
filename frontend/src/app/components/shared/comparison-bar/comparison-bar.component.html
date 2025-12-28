@@ -1,0 +1,51 @@
+<div class="comparison-bar" *ngIf="products.length > 0" [class.expanded]="isExpanded">
+  <div class="bar-header" (click)="toggleExpanded()">
+    <div class="header-content">
+      <span class="icon">⚖️</span>
+      <span class="title">Product Comparison</span>
+      <span class="count-badge">{{ getProductCount() }}/{{ getMaxProducts() }}</span>
+    </div>
+    <div class="header-actions">
+      <button class="compare-btn" (click)="goToComparison(); $event.stopPropagation()">
+        Compare Now
+      </button>
+      <button class="toggle-btn" [class.rotated]="isExpanded">
+        ▼
+      </button>
+    </div>
+  </div>
+
+  <div class="bar-content" *ngIf="isExpanded">
+    <div class="products-grid">
+      <div *ngFor="let product of products" class="product-item">
+        <button class="remove-product-btn" (click)="removeProduct(product.id, $event)" title="Remove">
+          ✕
+        </button>
+        <img [src]="getImageUrl(product.imageUrl)" [alt]="product.name" class="product-thumb">
+        <div class="product-info">
+          <p class="product-name">{{ product.name }}</p>
+          <p class="product-price">
+            <span *ngIf="product.discountPrice" class="discount-price">
+              ${{ product.discountPrice.toFixed(2) }}
+            </span>
+            <span [class.original-price]="product.discountPrice">
+              ${{ product.price.toFixed(2) }}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Empty Slots -->
+      <div *ngFor="let slot of [].constructor(getRemainingSlots())" class="empty-slot">
+        <span class="empty-icon">+</span>
+        <span class="empty-text">Add Product</span>
+      </div>
+    </div>
+
+    <div class="bar-footer">
+      <button class="clear-all-btn" (click)="clearAll($event)">
+        Clear All
+      </button>
+    </div>
+  </div>
+</div>

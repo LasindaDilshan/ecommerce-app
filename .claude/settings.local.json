@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Where-Object { $_ength -gt 10000 -and $_irectory.Name -notmatch \"obj|bin|Migrations\" })",
+      "Bash(Select-Object Name, Length, Directory)",
+      "Bash(Sort-Object -Property Length -Descending)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(powershell -Command:*)",
+      "Bash(npm i:*)",
+      "Bash(dotnet run)",
+      "Bash(ng serve:*)",
+      "Bash(cat:*)",
+      "Bash(docker:*)",
+      "Bash(docker-compose:*)",
+      "Bash(psql:*)",
+      "Bash(npm install)",
+      "Bash(npm run start)",
+      "Bash(dotnet build:*)",
+      "Bash(npm run build)",
+      "Bash(find:*)",
+      "Bash(git config:*)",
+      "Bash(gh:*)",
+      "Bash(winget list:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

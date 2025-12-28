@@ -1,0 +1,10 @@
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.log
+appsettings.Development.json
+Backend.Tests.Unit/
+Backend.Tests.Integration/
+EcommerceAPI.Tests/

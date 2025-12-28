@@ -1,0 +1,139 @@
+<div class="comparison-container">
+  <div class="comparison-header">
+    <h1>Product Comparison</h1>
+    <div class="header-actions">
+      <span class="product-count">{{ products.length }} of 4 products</span>
+      <button *ngIf="products.length > 0" class="clear-btn" (click)="clearAll()">
+        Clear All
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="products.length === 0" class="empty-state">
+    <div class="empty-icon">⚖️</div>
+    <h2>No Products to Compare</h2>
+    <p>Add products to comparison by clicking the "Compare" button on product pages.</p>
+    <button class="browse-btn" routerLink="/products">Browse Products</button>
+  </div>
+
+  <div *ngIf="products.length > 0" class="comparison-table-wrapper">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th class="attribute-column">Attributes</th>
+          <th *ngFor="let product of products" class="product-column">
+            <button class="remove-btn" (click)="removeProduct(product.id)" title="Remove from comparison">
+              ✕
+            </button>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Product Images -->
+        <tr class="image-row">
+          <td class="attribute-label">Product</td>
+          <td *ngFor="let product of products" class="product-cell">
+            <div class="product-image-container" (click)="viewProduct(product.id)">
+              <img [src]="getImageUrl(product.imageUrl)" [alt]="product.name" class="product-image">
+            </div>
+          </td>
+        </tr>
+
+        <!-- Product Names -->
+        <tr>
+          <td class="attribute-label">Name</td>
+          <td *ngFor="let product of products" class="product-cell">
+            <a [routerLink]="['/products', product.id]" class="product-name">{{ product.name }}</a>
+          </td>
+        </tr>
+
+        <!-- Price -->
+        <tr>
+          <td class="attribute-label">Price</td>
+          <td *ngFor="let product of products" class="product-cell">
+            <div class="price-container">
+              <span class="current-price" [class.best-value]="isLowestPrice(product)">
+                {{ formatPrice(getEffectivePrice(product)) }}
+              </span>
+              <span *ngIf="product.discountPrice && product.discountPrice < product.price" class="original-price">
+                {{ formatPrice(product.price) }}
+              </span>
+              <span *ngIf="getSavings(product)" class="savings-badge">
+                Save {{ getSavingsPercentage(product) }}%
+              </span>
+              <span *ngIf="isLowestPrice(product)" class="best-price-badge">
+                Best Price
+              </span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Rating -->
+        <tr>
+          <td class="attribute-label">Rating</td>
+          <td *ngFor="let product of products" class="product-cell">
+            <div class="rating-container" [class.best-value]="isHighestRating(product)">
+              <app-star-rating
+                [rating]="product.rating"
+                [reviewCount]="product.reviewCount"
+                [size]="'medium'">
+              </app-star-rating>
+              <span *ngIf="isHighestRating(product)" class="best-rating-badge">
+                Highest Rated
+              </span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Category -->
+        <tr>
+          <td class="attribute-label">Category</td>
+          <td *ngFor="let product of products" class="product-cell">
+            {{ product.categoryName || 'N/A' }}
+          </td>
+        </tr>
+
+        <!-- Stock -->
+        <tr>
+          <td class="attribute-label">Availability</td>
+          <td *ngFor="let product of products" class="product-cell">
+            <span [class]="'stock-badge ' + getStockClass(product.stockQuantity)">
+              {{ getStockStatus(product.stockQuantity) }}
+            </span>
+          </td>
+        </tr>
+
+        <!-- Description -->
+        <tr>
+          <td class="attribute-label">Description</td>
+          <td *ngFor="let product of products" class="product-cell description-cell">
+            <p class="description-text">{{ product.description }}</p>
+          </td>
+        </tr>
+
+        <!-- Actions -->
+        <tr class="action-row">
+          <td class="attribute-label">Actions</td>
+          <td *ngFor="let product of products" class="product-cell">
+            <div class="action-buttons">
+              <button
+                class="btn btn-primary"
+                (click)="viewProduct(product.id)"
+                [disabled]="product.stockQuantity === 0">
+                {{ product.stockQuantity === 0 ? 'Out of Stock' : 'View Details' }}
+              </button>
+              <button class="btn btn-secondary" (click)="removeProduct(product.id)">
+                Remove
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="products.length > 0 && products.length < 4" class="add-more">
+    <p>You can add up to {{ 4 - products.length }} more product(s) for comparison.</p>
+    <button class="browse-btn" routerLink="/products">Add More Products</button>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="star-rating" [ngClass]="'star-rating-' + size">
+  <div class="stars">
+    <span
+      *ngFor="let star of stars"
+      class="star"
+      [class.filled]="star <= displayRating"
+      [attr.aria-label]="'Star ' + star">
+      ★
+    </span>
+  </div>
+  <span *ngIf="showValue" class="rating-value">{{ formattedRating }}</span>
+  <span *ngIf="showCount && displayReviewCount > 0" class="review-count">({{ displayReviewCount }} {{ displayReviewCount === 1 ? 'review' : 'reviews' }})</span>
+</div>

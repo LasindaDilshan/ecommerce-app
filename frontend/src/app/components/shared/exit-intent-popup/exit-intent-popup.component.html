@@ -1,0 +1,39 @@
+<div class="exit-popup-overlay" *ngIf="showPopup" (click)="closePopup()">
+  <div class="exit-popup" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closePopup()">&times;</button>
+
+    <div class="popup-content">
+      <div class="icon">🎁</div>
+      <h2>Wait! Don't Leave Empty-Handed!</h2>
+      <p class="subtitle">Get <strong>10% OFF</strong> your first order</p>
+
+      <div class="discount-code-display">
+        <div class="code">{{ discountCode }}</div>
+        <button class="copy-btn" (click)="copyDiscountCode()">
+          {{ copiedToClipboard ? '✓ Copied!' : 'Copy Code' }}
+        </button>
+      </div>
+
+      <div class="email-capture">
+        <p class="email-label">Enter your email to get started:</p>
+        <div class="email-input-group">
+          <input
+            type="email"
+            [(ngModel)]="email"
+            placeholder="your@email.com"
+            class="email-input"
+            (keyup.enter)="claimOffer()"
+          />
+          <button
+            class="claim-btn"
+            (click)="claimOffer()"
+            [disabled]="!email">
+            Claim Offer
+          </button>
+        </div>
+      </div>
+
+      <p class="terms">*Valid for first-time customers only. Cannot be combined with other offers.</p>
+    </div>
+  </div>
+</div>

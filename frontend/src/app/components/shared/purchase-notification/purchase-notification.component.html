@@ -1,0 +1,13 @@
+<div class="purchase-notification" *ngIf="showNotification && currentNotification">
+  <div class="notification-content">
+    <div class="icon">🛍️</div>
+    <div class="details">
+      <div class="message">
+        <strong>{{ currentNotification.customerName }}</strong> from <strong>{{ currentNotification.location }}</strong>
+      </div>
+      <div class="product">purchased {{ currentNotification.productName }}</div>
+      <div class="time">{{ currentNotification.timeAgo }}</div>
+    </div>
+    <button class="close-btn" (click)="closeNotification()">&times;</button>
+  </div>
+</div>

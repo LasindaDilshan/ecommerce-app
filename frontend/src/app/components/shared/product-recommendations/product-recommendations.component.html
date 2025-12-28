@@ -1,0 +1,28 @@
+<div class="recommendations-section" *ngIf="products.length > 0">
+  <h2 class="recommendations-title">{{ title }}</h2>
+  <div class="recommendations-grid">
+    <div *ngFor="let product of products" class="product-card" [routerLink]="['/products', product.id]">
+      <div class="product-image-container">
+        <img [src]="getImageUrl(product.imageUrl)" [alt]="product.name" class="product-image">
+        <div *ngIf="hasDiscount(product)" class="discount-badge">
+          -{{ getDiscountPercentage(product) }}%
+        </div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <div class="rating-wrapper">
+          <app-star-rating
+            [rating]="product.rating"
+            [reviewCount]="product.reviewCount"
+            [size]="'small'"
+            [showValue]="false">
+          </app-star-rating>
+        </div>
+        <div class="product-pricing">
+          <span class="current-price">${{ getProductPrice(product) | number:'1.2-2' }}</span>
+          <span *ngIf="hasDiscount(product)" class="original-price">${{ product.price | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

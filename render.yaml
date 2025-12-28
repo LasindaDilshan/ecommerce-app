@@ -1,0 +1,51 @@
+services:
+  # Backend API
+  - type: web
+    name: ecommerce-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    region: oregon
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: ecommerce-db
+          property: connectionString
+      - key: JwtSettings__SecretKey
+        generateValue: true
+      - key: JwtSettings__Issuer
+        value: EcommerceAPI
+      - key: JwtSettings__Audience
+        value: EcommerceClient
+      - key: CorsOrigins__0
+        sync: false  # Set this to your frontend URL after deploying frontend
+
+  # Frontend (Static Site)
+  - type: web
+    name: ecommerce-frontend
+    runtime: static
+    buildCommand: cd frontend && npm ci && npm run build
+    staticPublishPath: ./frontend/dist/ecommerce-frontend
+    region: oregon
+    plan: free
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=31536000
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+databases:
+  - name: ecommerce-db
+    databaseName: ecommerce
+    plan: free
+    region: oregon

@@ -1,0 +1,98 @@
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stars {
+  display: flex;
+  gap: 0.1rem;
+}
+
+.star {
+  color: #ddd;
+  transition: color 0.2s;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.rating-value {
+  font-weight: 600;
+  color: #333;
+}
+
+.review-count {
+  color: #666;
+  font-size: 0.9em;
+}
+
+/* Size variants */
+.star-rating-small {
+  gap: 0.25rem;
+
+  .star {
+    font-size: 0.9rem;
+  }
+
+  .rating-value {
+    font-size: 0.85rem;
+  }
+
+  .review-count {
+    font-size: 0.75rem;
+  }
+}
+
+.star-rating-medium {
+  gap: 0.5rem;
+
+  .star {
+    font-size: 1.2rem;
+  }
+
+  .rating-value {
+    font-size: 1rem;
+  }
+
+  .review-count {
+    font-size: 0.9rem;
+  }
+}
+
+.star-rating-large {
+  gap: 0.75rem;
+
+  .star {
+    font-size: 1.5rem;
+  }
+
+  .rating-value {
+    font-size: 1.25rem;
+  }
+
+  .review-count {
+    font-size: 1rem;
+  }
+}
+
+/* Hover effect on stars */
+.stars:hover .star {
+  opacity: 0.8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .star-rating-large {
+    .star {
+      font-size: 1.3rem;
+    }
+  }
+
+  .star-rating-medium {
+    .star {
+      font-size: 1rem;
+    }
+  }
+}

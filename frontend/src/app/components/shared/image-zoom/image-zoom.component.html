@@ -1,0 +1,52 @@
+<div class="image-gallery">
+  <!-- Main Image -->
+  <div class="main-image-container" (click)="openLightbox(selectedImageIndex)">
+    <img [src]="selectedImage" [alt]="productName" class="main-image">
+    <div class="zoom-hint">🔍 Click to zoom</div>
+  </div>
+
+  <!-- Thumbnail Strip -->
+  <div class="thumbnails" *ngIf="images.length > 1">
+    <div
+      *ngFor="let image of images; let i = index"
+      class="thumbnail"
+      [class.active]="i === selectedImageIndex"
+      (click)="selectImage(i)">
+      <img [src]="image" [alt]="productName">
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="lightbox-overlay" *ngIf="showLightbox" (click)="closeLightbox()">
+  <div class="lightbox-content" (click)="$event.stopPropagation()">
+    <button class="lightbox-close" (click)="closeLightbox()">&times;</button>
+
+    <div class="lightbox-controls">
+      <button class="zoom-btn" (click)="zoomOut()">−</button>
+      <span class="zoom-level">{{ (zoomLevel * 100).toFixed(0) }}%</span>
+      <button class="zoom-btn" (click)="zoomIn()">+</button>
+    </div>
+
+    <button class="nav-btn prev" (click)="previousImage()" *ngIf="images.length > 1">‹</button>
+    <button class="nav-btn next" (click)="nextImage()" *ngIf="images.length > 1">›</button>
+
+    <div class="lightbox-image-container">
+      <img
+        [src]="selectedImage"
+        [alt]="productName"
+        [style.transform]="'scale(' + zoomLevel + ')'"
+        class="lightbox-image">
+    </div>
+
+    <div class="lightbox-thumbnails" *ngIf="images.length > 1">
+      <div
+        *ngFor="let image of images; let i = index"
+        class="lightbox-thumbnail"
+        [class.active]="i === selectedImageIndex"
+        (click)="selectImage(i)">
+        <img [src]="image" [alt]="productName">
+      </div>
+    </div>
+  </div>
+</div>
