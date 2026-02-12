@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UserService } from '../../services/user.service';
@@ -128,7 +129,7 @@ import { User } from '../../models/auth.models';
               </div>
             </button>
 
-            <button class="action-btn">
+            <button class="action-btn" (click)="navigateTo('/security')">
               <span class="icon">🔐</span>
               <div class="action-content">
                 <strong>Two-Factor Authentication</strong>
@@ -462,7 +463,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private timeoutIds: any[] = [];
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadProfile();
@@ -516,6 +517,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.loadProfile(); // Reload profile data
     this.successMessage = '';
     this.errorMessage = '';
+  }
+
+  navigateTo(path: string): void {
+    this.router.navigate([path]);
   }
 
   getInitials(): string {

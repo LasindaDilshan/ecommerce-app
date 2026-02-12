@@ -30,6 +30,10 @@ export const routes: Routes = [
     path: 'track-order',
     loadComponent: () => import('./components/track-order/track-order.component').then(m => m.TrackOrderComponent)
   },
+  {
+    path: 'search',
+    loadComponent: () => import('./components/search/search.component').then(m => m.SearchComponent)
+  },
 
   // Public cart and checkout (accessible to guests)
   {
@@ -68,6 +72,26 @@ export const routes: Routes = [
   {
     path: 'profile',
     loadComponent: () => import('./components/profile/profile.component').then(m => m.ProfileComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'loyalty',
+    loadComponent: () => import('./components/loyalty/loyalty.component').then(m => m.LoyaltyComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'subscriptions',
+    loadComponent: () => import('./components/subscriptions/subscriptions.component').then(m => m.SubscriptionsComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'notifications',
+    loadComponent: () => import('./components/notifications/notifications.component').then(m => m.NotificationsComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'security',
+    loadComponent: () => import('./components/profile/two-factor-setup/two-factor-setup.component').then(m => m.TwoFactorSetupComponent),
     canActivate: [AuthGuard]
   },
 
