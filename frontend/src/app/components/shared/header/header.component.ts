@@ -7,12 +7,13 @@ import { AuthService } from '../../../services/auth.service';
 import { CartService } from '../../../services/cart.service';
 import { WishlistService } from '../../../services/wishlist.service';
 import { ThemeService } from '../../../services/theme.service';
+import { CurrencySelectorComponent } from '../currency-selector/currency-selector.component';
 import { User } from '../../../models/auth.models';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive, CurrencySelectorComponent],
   template: `
     <header class="header animate-slideInDown">
       <div class="container">
@@ -33,6 +34,10 @@ import { User } from '../../../models/auth.models';
               <span class="nav-icon">📦</span>
               Products
             </a>
+            <a routerLink="/search" routerLinkActive="active" class="nav-link">
+              <span class="nav-icon">🔍</span>
+              Search
+            </a>
 
             <ng-container *ngIf="currentUser">
               <a routerLink="/orders" routerLinkActive="active" class="nav-link">
@@ -42,6 +47,10 @@ import { User } from '../../../models/auth.models';
               <a routerLink="/profile" routerLinkActive="active" class="nav-link">
                 <span class="nav-icon">👤</span>
                 Profile
+              </a>
+              <a routerLink="/loyalty" routerLinkActive="active" class="nav-link">
+                <span class="nav-icon">⭐</span>
+                Rewards
               </a>
 
               <ng-container *ngIf="isAdmin">
@@ -81,6 +90,9 @@ import { User } from '../../../models/auth.models';
                 Sign Up
               </a>
             </ng-container>
+
+            <!-- Currency Selector -->
+            <app-currency-selector></app-currency-selector>
 
             <!-- Dark Mode Toggle -->
             <button

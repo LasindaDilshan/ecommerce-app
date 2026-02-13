@@ -15,12 +15,14 @@ import { Product } from '../../../models/product.models';
 import { ProductRecommendationsComponent } from '../../shared/product-recommendations/product-recommendations.component';
 import { ImageZoomComponent } from '../../shared/image-zoom/image-zoom.component';
 import { StarRatingComponent } from '../../shared/star-rating/star-rating.component';
+import { ReviewSectionComponent } from '../../shared/review-section/review-section.component';
+import { ProductQAComponent } from '../../shared/product-qa/product-qa.component';
 import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, ProductRecommendationsComponent, ImageZoomComponent, StarRatingComponent],
+  imports: [CommonModule, ProductRecommendationsComponent, ImageZoomComponent, StarRatingComponent, ReviewSectionComponent, ProductQAComponent],
   template: `
     <div class="container" *ngIf="product">
       <div class="product-detail">
@@ -90,6 +92,12 @@ import { environment } from '../../../../environments/environment';
           </div>
         </div>
       </div>
+
+      <!-- Reviews Section -->
+      <app-review-section *ngIf="product" [productId]="product.id"></app-review-section>
+
+      <!-- Q&A Section -->
+      <app-product-qa *ngIf="product" [productId]="product.id"></app-product-qa>
 
       <app-product-recommendations
         [products]="customersAlsoBought"
