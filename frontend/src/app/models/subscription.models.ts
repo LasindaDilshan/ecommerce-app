@@ -1,4 +1,4 @@
-import { Address } from './order.models';
+import { ShippingAddress } from './order.models';
 import { CartItem } from './cart.models';
 
 // Enums
@@ -129,7 +129,7 @@ export interface Subscription {
   cancelledAt?: Date;
   cardLast4?: string;
   cardBrand?: string;
-  shippingAddress?: Address;
+  shippingAddress?: ShippingAddress;
   recentPayments: SubscriptionPayment[];
   upcomingOrders: SubscriptionOrder[];
 }
